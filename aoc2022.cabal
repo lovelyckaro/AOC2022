@@ -9,17 +9,13 @@ synopsis: Loves solutions for advent of code 2022
 -- description:
 
 -- A URL where users can report bugs.
--- bug-reports:
+bug-reports: https://github.com/lovelyckaro/AOC2022/issues
 
 -- The license under which the package is released.
 -- license:
 author:             Love Lyckaro
 maintainer:         love.lyckaro@hotmail.se
 
--- A copyright notice.
--- copyright:
--- category:
-extra-source-files: CHANGELOG.md
 
 library
   hs-source-dirs: lib
