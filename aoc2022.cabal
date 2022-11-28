@@ -48,7 +48,7 @@ executable submit
   default-language: GHC2021
 
 executable day1
-    main-is: Day1.hs
+    main-is: Day01.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -62,7 +62,7 @@ executable day1
     hs-source-dirs: app
     default-language: GHC2021
 executable day2
-    main-is: Day2.hs
+    main-is: Day02.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -76,7 +76,7 @@ executable day2
     hs-source-dirs: app
     default-language: GHC2021
 executable day3
-    main-is: Day3.hs
+    main-is: Day03.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -90,7 +90,7 @@ executable day3
     hs-source-dirs: app
     default-language: GHC2021
 executable day4
-    main-is: Day4.hs
+    main-is: Day04.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -104,7 +104,7 @@ executable day4
     hs-source-dirs: app
     default-language: GHC2021
 executable day5
-    main-is: Day5.hs
+    main-is: Day05.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -118,7 +118,7 @@ executable day5
     hs-source-dirs: app
     default-language: GHC2021
 executable day6
-    main-is: Day6.hs
+    main-is: Day06.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -132,7 +132,7 @@ executable day6
     hs-source-dirs: app
     default-language: GHC2021
 executable day7
-    main-is: Day7.hs
+    main-is: Day07.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -146,7 +146,7 @@ executable day7
     hs-source-dirs: app
     default-language: GHC2021
 executable day8
-    main-is: Day8.hs
+    main-is: Day08.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -160,7 +160,7 @@ executable day8
     hs-source-dirs: app
     default-language: GHC2021
 executable day9
-    main-is: Day9.hs
+    main-is: Day09.hs
     build-depends:
       base >= 4.16.0.0,
       containers,
