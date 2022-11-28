@@ -1,0 +1,403 @@
+cabal-version:      2.4
+name:               aoc2022
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+synopsis: Loves solutions for advent of code 2022
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Love Lyckaro
+maintainer:         love.lyckaro@hotmail.se
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+library
+  hs-source-dirs: lib
+  exposed-modules:
+    SantaLib
+  other-modules:
+  build-depends:
+    base >= 4,
+    advent-of-code-api >= 0.2.8.0,
+    containers,
+    text,
+    tagsoup,
+    vector
+  default-language: GHC2021
+
+executable fetch
+  main-is: Fetch.hs
+  build-depends:
+    base >= 4,
+    aoc2022
+  hs-source-dirs: app
+  default-language: GHC2021
+
+executable submit
+  main-is: Submit.hs
+  build-depends:
+    base >= 4,
+    aoc2022
+  hs-source-dirs: app
+  default-language: GHC2021
+
+executable day1
+    main-is: Day1.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day2
+    main-is: Day2.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day3
+    main-is: Day3.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day4
+    main-is: Day4.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day5
+    main-is: Day5.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day6
+    main-is: Day6.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day7
+    main-is: Day7.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day8
+    main-is: Day8.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day9
+    main-is: Day9.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day10
+    main-is: Day10.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day11
+    main-is: Day11.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day12
+    main-is: Day12.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day13
+    main-is: Day13.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day14
+    main-is: Day14.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day15
+    main-is: Day15.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day16
+    main-is: Day16.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day17
+    main-is: Day17.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day18
+    main-is: Day18.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day19
+    main-is: Day19.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day20
+    main-is: Day20.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day21
+    main-is: Day21.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day22
+    main-is: Day22.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day23
+    main-is: Day23.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day24
+    main-is: Day24.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day25
+    main-is: Day25.hs
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl
+    hs-source-dirs: app
+    default-language: GHC2021
