@@ -14,3 +14,6 @@ To actually submit your solutions use
 ```bash
 cabal run submit [day] [part]
 ```
+
+To build my solutions you're going to have a decently recent version of GHC,
+since I use GHC2021. I've built them all using GHC 9.2.4.
