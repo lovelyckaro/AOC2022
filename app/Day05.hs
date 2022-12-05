@@ -1,13 +1,14 @@
 module Main where
 
+import Control.Monad.ST
 import Data.Char (isSpace)
 import Data.List (foldl', transpose)
 import Data.List.Split (splitOn)
 import Data.Maybe (catMaybes, listToMaybe)
-import SantaLib.Parsing
 import Data.Vector qualified as V
 import Data.Vector.Mutable qualified as MV
 import SantaLib
+import SantaLib.Parsing
 import System.Exit
 
 data MoveInstr = MoveInstr {amount, from, to :: Int}
@@ -37,7 +38,7 @@ pLine = some . lexemeSp $ pCell
 
 pMatrix :: Parser (V.Vector [Char])
 pMatrix = do
-  ls <- many $ lexemeLn pLine 
+  ls <- many $ lexemeLn pLine
   space
   some $ lexeme digitChar
   let stacks = V.fromList . map catMaybes $ transpose ls
@@ -49,38 +50,38 @@ pInp = do
   eol >> eol
   instrs <- some $ lexemeLn pInstr
   eof
-  return (m, instrs)  
+  return (m, instrs)
 
-move :: V.Vector [a] -> MoveInstr -> V.Vector [a]
-move s (MoveInstr n from to) =
-  V.modify
-    ( \v -> do
-        fromStack <- MV.read v from
-        let moved = take n fromStack
-        MV.modify v (drop n) from
-        MV.modify v (reverse moved <>) to
-    )
-    s
+move :: MV.STVector s [a] -> MoveInstr -> ST s ()
+move s (MoveInstr n from to) = do
+  fromStack <- MV.read s from
+  let moved = take n fromStack
+  MV.modify s (drop n) from
+  MV.modify s (reverse moved <>) to
 
-move2 :: V.Vector [a] -> MoveInstr -> V.Vector [a]
-move2 s (MoveInstr n from to) =
-  V.modify
-    ( \v -> do
-        fromStack <- MV.read v from
-        let moved = take n fromStack
-        MV.modify v (drop n) from
-        MV.modify v (moved <>) to
-    )
-    s
+move2 :: MV.STVector s [a] -> MoveInstr -> ST s ()
+move2 s (MoveInstr n from to) = do
+  fromStack <- MV.read s from
+  let moved = take n fromStack
+  MV.modify s (drop n) from
+  MV.modify s (moved <>) to
 
 topOfStacks :: V.Vector [a] -> [a]
 topOfStacks = catMaybes . V.toList . V.map listToMaybe
 
 part1 :: V.Vector [Char] -> [MoveInstr] -> String
-part1 stacks = topOfStacks . foldl' move stacks
+part1 stacks moves = runST $ do
+  v <- V.thaw stacks
+  mapM_ (move v) moves
+  v' <- V.freeze v
+  return $ topOfStacks v'
 
 part2 :: V.Vector [Char] -> [MoveInstr] -> String
-part2 stacks = topOfStacks . foldl' move2 stacks
+part2 stacks moves = runST $ do
+  v <- V.thaw stacks
+  mapM_ (move2 v) moves
+  v' <- V.freeze v
+  return $ topOfStacks v'
 
 main :: IO ()
 main = do
