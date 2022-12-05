@@ -87,7 +87,7 @@ main :: IO ()
 main = do
   inp <- getInput 5
   (stacks, moves) <- case runParser pInp "input/day5.input" inp of
-    Left error -> print (errorBundlePretty error) >> exitFailure
+    Left error -> putStrLn (errorBundlePretty error) >> exitFailure
     Right a -> return a
   writeFile "answer/day5-part1" (part1 stacks moves)
   writeFile "answer/day5-part2" (part2 stacks moves)
