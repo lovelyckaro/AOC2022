@@ -21,6 +21,7 @@ library
   hs-source-dirs: lib
   exposed-modules:
     SantaLib
+    SantaLib.Parsing
   other-modules:
   build-depends:
     base >= 4,
@@ -28,7 +29,8 @@ library
     containers,
     text,
     tagsoup,
-    vector
+    vector,
+    megaparsec
   default-language: GHC2021
 
 executable fetch
