@@ -4,31 +4,52 @@ import Data.Char (isSpace)
 import Data.List (foldl', transpose)
 import Data.List.Split (splitOn)
 import Data.Maybe (catMaybes, listToMaybe)
+import SantaLib.Parsing
 import Data.Vector qualified as V
 import Data.Vector.Mutable qualified as MV
 import SantaLib
-
-everyNth :: Int -> [a] -> [a]
-everyNth n ls = [ls !! i | i <- [0, n .. length ls - 1]]
-
-pStacks :: [String] -> V.Vector String
-pStacks = V.fromList . map (filter (not . isSpace)) . transpose . map (everyNth 4 . tail)
+import System.Exit
 
 data MoveInstr = MoveInstr {amount, from, to :: Int}
   deriving (Show, Eq)
 
-pInstrs :: [String] -> [MoveInstr]
-pInstrs ls = do
-  line <- ls
-  let [amount, to, from] = filterNums line
-  pure $ MoveInstr amount (to - 1) (from - 1)
+pInstr :: Parser MoveInstr
+pInstr = do
+  symbol "move"
+  amount <- lexeme decimal
+  symbol "from"
+  from <- pred <$> lexeme decimal
+  symbol "to"
+  to <- pred <$> lexeme decimal
+  return $ MoveInstr amount from to
 
-pInp :: String -> (V.Vector String, [MoveInstr])
-pInp inp = (stacks, instrs)
+brackets :: Parser a -> Parser a
+brackets = between (string "[") (string "]")
+
+pCell :: Parser (Maybe Char)
+pCell = filledCell <|> emptyCell
   where
-    stacks = pStacks . init . lines $ stackPart
-    instrs = pInstrs . lines $ instrPart
-    [stackPart, instrPart] = splitOn "\n\n" inp
+    filledCell = Just <$> brackets anySingle
+    emptyCell = Nothing <$ string "   "
+
+pLine :: Parser [Maybe Char]
+pLine = some . lexemeSp $ pCell
+
+pMatrix :: Parser (V.Vector [Char])
+pMatrix = do
+  ls <- many $ lexemeLn pLine 
+  space
+  some $ lexeme digitChar
+  let stacks = V.fromList . map catMaybes $ transpose ls
+  return stacks
+
+pInp :: Parser (V.Vector [Char], [MoveInstr])
+pInp = do
+  m <- pMatrix
+  eol >> eol
+  instrs <- some $ lexemeLn pInstr
+  eof
+  return (m, instrs)  
 
 move :: V.Vector [a] -> MoveInstr -> V.Vector [a]
 move s (MoveInstr n from to) =
@@ -52,23 +73,20 @@ move2 s (MoveInstr n from to) =
     )
     s
 
-moveAll :: V.Vector [a] -> [MoveInstr] -> V.Vector [a]
-moveAll = foldl' move
-
-moveAll2 :: V.Vector [a] -> [MoveInstr] -> V.Vector [a]
-moveAll2 = foldl' move2
-
 topOfStacks :: V.Vector [a] -> [a]
 topOfStacks = catMaybes . V.toList . V.map listToMaybe
 
-part1 :: String -> String
-part1 = topOfStacks . uncurry moveAll . pInp
+part1 :: V.Vector [Char] -> [MoveInstr] -> String
+part1 stacks = topOfStacks . foldl' move stacks
 
-part2 :: String -> String
-part2 = topOfStacks . uncurry moveAll2 . pInp
+part2 :: V.Vector [Char] -> [MoveInstr] -> String
+part2 stacks = topOfStacks . foldl' move2 stacks
 
 main :: IO ()
 main = do
   inp <- getInput 5
-  writeFile "answer/day5-part1" (part1 inp)
-  writeFile "answer/day5-part2" (part2 inp)
+  (stacks, moves) <- case runParser pInp "input/day5.input" inp of
+    Left error -> print (errorBundlePretty error) >> exitFailure
+    Right a -> return a
+  writeFile "answer/day5-part1" (part1 stacks moves)
+  writeFile "answer/day5-part2" (part2 stacks moves)
