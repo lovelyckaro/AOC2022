@@ -114,7 +114,8 @@ executable day5
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      regex-tdfa
     hs-source-dirs: app
     default-language: GHC2021
 executable day6

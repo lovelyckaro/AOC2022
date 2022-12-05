@@ -11,6 +11,7 @@ module SantaLib
     connected,
     toVector,
     (|>),
+    filterNums,
     module Advent.Types,
   )
 where
@@ -18,7 +19,7 @@ where
 import Advent
 import Advent.Types
 import Data.Foldable
-import Data.Function ((&))
+import Data.Function ((&), on)
 import Data.Map (Map, (!), (!?))
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
@@ -30,6 +31,8 @@ import qualified Data.Text.IO as TIO
 import Data.Vector (Vector)
 import qualified Data.Vector as V
 import Text.HTML.TagSoup
+import Data.Char
+import Data.List
 
 getOpts :: IO AoCOpts
 getOpts = do
@@ -113,3 +116,6 @@ toVector = V.fromList . toList
 (|>) = (&)
 
 infixl 1 |>
+
+filterNums :: String -> [Int]
+filterNums = map read . filter (all isNumber) . groupBy ((==) `on` isNumber)
