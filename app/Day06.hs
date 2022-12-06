@@ -3,13 +3,9 @@ import SantaLib
 import Data.List (nub)
 
 detectStart :: Int -> String -> Int
-detectStart wantedLength = go wantedLength "" 0
-  where
-    go wantedLength window readMessages stream
-      | length (nub window) == wantedLength = readMessages
-      | length window < wantedLength = go wantedLength (head stream : window) (readMessages+1) (tail stream)
-      | otherwise = go wantedLength (head stream : init window) (readMessages+1) (tail stream)
-
+detectStart len str
+  | take len str == nub (take len str) = len
+  | otherwise = 1 + detectStart len (tail str)
 
 part1 :: String -> Int
 part1 = detectStart 4
