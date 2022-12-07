@@ -1,8 +1,10 @@
 # 🎄 My solutions for Advent of Code 2022 🎄
 
+![ormolu](https://github.com/lovelyckaro/AOC2022/actions/workflows/format-checker.yml/badge.svg)
+
 Run a day using `cabal run day[number]`, e.g. `cabal run day3`.
 
-In .env put one line with year, and one with a session cookie, see .env.example for example.
+In .aoc put one line with year, and one with a session cookie, see .aoc.example for example.
 
 To fetch a days description and your input use:
 ```bash
