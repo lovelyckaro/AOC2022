@@ -2,17 +2,21 @@
 
 ![ormolu](https://github.com/lovelyckaro/AOC2022/actions/workflows/format-checker.yml/badge.svg)
 
+<!-- advent_readme_stars table --->
+
 Run a day using `cabal run day[number]`, e.g. `cabal run day3`.
 
 In .aoc put one line with year, and one with a session cookie, see .aoc.example for example.
 
 To fetch a days description and your input use:
+
 ```bash
 cabal run fetch [day]
-``` 
+```
 
 Days should save solutions in `./answer/day[number]-part[number]`
 To actually submit your solutions use
+
 ```bash
 cabal run submit [day] [part]
 ```
