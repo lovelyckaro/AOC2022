@@ -2,7 +2,7 @@
 
 ![ormolu](https://github.com/lovelyckaro/AOC2022/actions/workflows/format-checker.yml/badge.svg)
 
-<!-- advent_readme_stars table --->
+<!--- advent_readme_stars table --->
 
 Run a day using `cabal run day[number]`, e.g. `cabal run day3`.
 
