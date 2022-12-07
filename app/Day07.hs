@@ -1,26 +1,25 @@
 module Main where
+
+import Data.Map (Map)
+import Data.Map qualified as M
+import Data.Maybe (fromJust)
 import SantaLib
 import SantaLib.Parsing
-import Data.Map qualified as M
-import Data.Map (Map)
-import Data.Ord
-import Data.Maybe
 import System.Exit (exitFailure)
 
-
 data FileTree = Dir (Map String FileTree) | File Int
-  deriving Show
+  deriving (Show)
 
 data BreadCrumb = Crumb String (Map String FileTree)
-  deriving Show
+  deriving (Show)
 
 type FileTreeZipper = (Map String FileTree, [BreadCrumb])
 
 data Path = ChildDir String | Root | ToParent
-  deriving Show
+  deriving (Show)
 
 data Cmd = Cd Path | Ls (Map String FileTree)
-  deriving Show
+  deriving (Show)
 
 pPath :: Parser Path
 pPath = pRoot <|> pParent <|> pChildDir
@@ -78,9 +77,9 @@ update newContents (Crumb chosen parentContents : crumbs) = do
 walk :: [Cmd] -> FileTreeZipper -> Maybe FileTreeZipper
 walk [] zipper = Just zipper
 walk (Ls dirContents : rest) (knownContents, parents) = do
-    let contents' = M.union dirContents knownContents
-    parents' <- update contents' parents
-    walk rest (contents', parents')
+  let contents' = M.union dirContents knownContents
+  parents' <- update contents' parents
+  walk rest (contents', parents')
 walk (Cd path : rest) ft = do
   ft' <- cd path ft
   walk rest ft'
@@ -89,17 +88,17 @@ size :: FileTree -> Int
 size (Dir contents) = sum (M.map size contents)
 size (File s) = s
 
-sizeTable :: FileTree -> String ->  Map String Int
+sizeTable :: FileTree -> String -> Map String Int
 sizeTable (File s) name = M.empty
 sizeTable (Dir contents) name = M.insert name (sum $ M.map size contents) sizes
   where
     sizes = foldr M.union M.empty sizeTables
-    sizeTables = map (\(n, ft) -> sizeTable ft (name <> "/" <> n)) $ M.toList contents 
+    sizeTables = map (\(n, ft) -> sizeTable ft (name <> "/" <> n)) $ M.toList contents
 
 part1 :: [Cmd] -> Int
 part1 commands = fromJust $ do
   res <- walk commands root
-  (rootContents,[]) <- cd Root res
+  (rootContents, []) <- cd Root res
   let table = sizeTable (Dir rootContents) ""
   let smallDirs = M.filter (<= 100000) table
   return (sum smallDirs)
