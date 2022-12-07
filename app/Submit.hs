@@ -1,4 +1,5 @@
 module Main where
+
 import SantaLib
 import System.Environment
 import System.Exit (exitFailure)

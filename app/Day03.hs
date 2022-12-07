@@ -1,8 +1,8 @@
 module Main where
 
-import Data.Bifunctor ( Bifunctor(bimap) )
-import Data.Char ( isAsciiLower, isAsciiUpper )
-import Data.List.Split ( chunksOf )
+import Data.Bifunctor (Bifunctor (bimap))
+import Data.Char (isAsciiLower, isAsciiUpper)
+import Data.List.Split (chunksOf)
 import Data.Set (Set)
 import Data.Set qualified as S
 import SantaLib
