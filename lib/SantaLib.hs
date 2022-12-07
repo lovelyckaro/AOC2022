@@ -20,21 +20,20 @@ import Advent.Types
 import Data.Foldable
 import Data.Function ((&))
 import Data.Map (Map, (!), (!?))
-import qualified Data.Map as M
+import Data.Map qualified as M
 import Data.Maybe (fromMaybe)
 import Data.Set (Set)
-import qualified Data.Set as S
+import Data.Set qualified as S
 import Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.Text.IO as TIO
+import Data.Text qualified as T
+import Data.Text.IO qualified as TIO
 import Data.Vector (Vector)
-import qualified Data.Vector as V
+import Data.Vector qualified as V
 import Text.HTML.TagSoup
-
 
 getOpts :: IO AoCOpts
 getOpts = do
-  env <- readFile ".env"
+  env <- readFile ".aoc"
   let ls = lines env
   let (year, key) = (read $ head ls, ls !! 1)
   return $ defaultAoCOpts year key

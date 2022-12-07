@@ -1,6 +1,7 @@
 module Main where
-import SantaLib
+
 import Data.List (nub)
+import SantaLib
 
 detectStart :: Int -> String -> Int
 detectStart len str

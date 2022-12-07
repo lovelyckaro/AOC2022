@@ -44,7 +44,7 @@ pLSResult = some $ pDir <|> pFile
 pCommand :: Parser [Cmd]
 pCommand = symbol "$" >> (pCd <|> pLs)
   where
-    pCd = (:[]) . Cd <$> (symbol "cd" >> lexemeLn pPath)
+    pCd = (: []) . Cd <$> (symbol "cd" >> lexemeLn pPath)
     pLs = symbolLn "ls" >> pLSResult
 
 pInp :: Parser [Cmd]
