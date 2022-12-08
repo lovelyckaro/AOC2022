@@ -1,9 +1,9 @@
 module Main where
 
-import Control.Applicative
-import Data.Foldable
-import Data.List
-import Data.Maybe
+import Control.Applicative (Alternative ((<|>)))
+import Data.Foldable (Foldable (foldl'))
+import Data.List (transpose)
+import Data.Maybe (catMaybes)
 import SantaLib
 
 pInp :: String -> [[Int]]
