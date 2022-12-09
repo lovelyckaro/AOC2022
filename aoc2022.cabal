@@ -166,6 +166,7 @@ executable day8
     default-language: GHC2021
 executable day9
     main-is: Day09.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -175,7 +176,8 @@ executable day9
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day10
