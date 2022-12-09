@@ -11,6 +11,7 @@ module SantaLib.Parsing
     symbolLn,
     symbolSp,
     filterNums,
+    parseIO
   )
 where
 
@@ -22,6 +23,7 @@ import Data.Void (Void)
 import Text.Megaparsec hiding (getInput)
 import Text.Megaparsec.Char hiding (space)
 import Text.Megaparsec.Char.Lexer qualified as L
+import System.Exit (exitFailure)
 
 type Parser = Parsec Void String
 
@@ -56,3 +58,8 @@ symbolSp = L.symbol (void . optional . char $ ' ')
 
 filterNums :: String -> [Int]
 filterNums = map read . filter (all isNumber) . groupBy ((==) `on` isNumber)
+
+parseIO :: Parser a -> FilePath -> String -> IO a
+parseIO parser path str = case parse parser path str of
+  Left err -> putStrLn (errorBundlePretty err) >> exitFailure
+  Right ok -> return ok

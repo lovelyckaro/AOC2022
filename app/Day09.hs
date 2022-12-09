@@ -67,8 +67,6 @@ part init = S.size . S.fromList . map (last . knots) . scanl move init
 main :: IO ()
 main = do
   inp <- getInput 9
-  ins <- case parse pInp "" inp of
-    P.Right ok -> return ok
-    P.Left err -> putStrLn (errorBundlePretty err) >> exitFailure
+  ins <- parseIO pInp "day9.input" inp
   putAnswer 9 Part1 (part initState ins)
   putAnswer 9 Part2 (part initState2 ins)
