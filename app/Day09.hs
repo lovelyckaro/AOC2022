@@ -50,16 +50,17 @@ moveTail head tail
   | neighbor head tail = tail
   | otherwise = tail `addTup` capMove (head `subTup` tail)
 
+dirTup :: Instruction -> (Int, Int)
+dirTup Right = (1, 0)
+dirTup Left = (-1, 0)
+dirTup Down = (0, -1)
+dirTup Up = (0, 1)
+
 move :: State -> Instruction -> State
 move (State knots) dir = State knots'
   where
     knots' = head' : zipWith moveTail knots' (tail knots)
     head' = head knots `addTup` dirTup dir
-    dirTup :: Instruction -> (Int, Int)
-    dirTup Right = (1, 0)
-    dirTup Left = (-1, 0)
-    dirTup Down = (0, -1)
-    dirTup Up = (0, 1)
 
 part :: State -> [Instruction] -> Int
 part init = S.size . S.fromList . map (last . knots) . scanl move init

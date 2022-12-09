@@ -11,7 +11,7 @@ module SantaLib.Parsing
     symbolLn,
     symbolSp,
     filterNums,
-    parseIO
+    parseIO,
   )
 where
 
@@ -20,10 +20,10 @@ import Data.Char (isNumber)
 import Data.Function (on)
 import Data.List (groupBy)
 import Data.Void (Void)
+import System.Exit (exitFailure)
 import Text.Megaparsec hiding (getInput)
 import Text.Megaparsec.Char hiding (space)
 import Text.Megaparsec.Char.Lexer qualified as L
-import System.Exit (exitFailure)
 
 type Parser = Parsec Void String
 
