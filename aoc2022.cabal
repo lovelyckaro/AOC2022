@@ -23,6 +23,7 @@ library
     SantaLib
     SantaLib.Parsing
   other-modules:
+  ghc-options: -interactive-print Text.Pretty.Simple.pPrint
   build-depends:
     base >= 4,
     advent-of-code-api >= 0.2.8.0,
@@ -35,6 +36,7 @@ library
 
 executable fetch
   main-is: Fetch.hs
+  ghc-options: -interactive-print Text.Pretty.Simple.pPrint
   build-depends:
     base >= 4,
     aoc2022
@@ -43,6 +45,7 @@ executable fetch
 
 executable submit
   main-is: Submit.hs
+  ghc-options: -interactive-print Text.Pretty.Simple.pPrint
   build-depends:
     base >= 4,
     aoc2022
@@ -51,62 +54,7 @@ executable submit
 
 executable day1
     main-is: Day01.hs
-    build-depends:
-      base >= 4.16.0.0,
-      containers,
-      megaparsec,
-      unordered-containers,
-      text,
-      vector,
-      aoc2022,
-      split,
-      mtl
-    hs-source-dirs: app
-    default-language: GHC2021
-executable day2
-    main-is: Day02.hs
-    build-depends:
-      base >= 4.16.0.0,
-      containers,
-      megaparsec,
-      unordered-containers,
-      text,
-      vector,
-      aoc2022,
-      split,
-      mtl
-    hs-source-dirs: app
-    default-language: GHC2021
-executable day3
-    main-is: Day03.hs
-    build-depends:
-      base >= 4.16.0.0,
-      containers,
-      megaparsec,
-      unordered-containers,
-      text,
-      vector,
-      aoc2022,
-      split,
-      mtl
-    hs-source-dirs: app
-    default-language: GHC2021
-executable day4
-    main-is: Day04.hs
-    build-depends:
-      base >= 4.16.0.0,
-      containers,
-      megaparsec,
-      unordered-containers,
-      text,
-      vector,
-      aoc2022,
-      split,
-      mtl
-    hs-source-dirs: app
-    default-language: GHC2021
-executable day5
-    main-is: Day05.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -117,11 +65,12 @@ executable day5
       aoc2022,
       split,
       mtl,
-      regex-tdfa
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
-executable day6
-    main-is: Day06.hs
+executable day2
+    main-is: Day02.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -131,7 +80,73 @@ executable day6
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day3
+    main-is: Day03.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl,
+      pretty-simple
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day4
+    main-is: Day04.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl,
+      pretty-simple
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day5
+    main-is: Day05.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl,
+      pretty-simple,
+      regex-tdfa
+    hs-source-dirs: app
+    default-language: GHC2021
+executable day6
+    main-is: Day06.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
+    build-depends:
+      base >= 4.16.0.0,
+      containers,
+      megaparsec,
+      unordered-containers,
+      text,
+      vector,
+      aoc2022,
+      split,
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day7
@@ -152,6 +167,7 @@ executable day7
     default-language: GHC2021
 executable day8
     main-is: Day08.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -161,7 +177,8 @@ executable day8
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day9
@@ -182,6 +199,7 @@ executable day9
     default-language: GHC2021
 executable day10
     main-is: Day10.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -191,11 +209,13 @@ executable day10
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day11
     main-is: Day11.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -205,11 +225,13 @@ executable day11
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day12
     main-is: Day12.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -219,11 +241,13 @@ executable day12
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day13
     main-is: Day13.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -233,11 +257,13 @@ executable day13
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day14
     main-is: Day14.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -247,11 +273,13 @@ executable day14
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day15
     main-is: Day15.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -261,11 +289,12 @@ executable day15
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
     hs-source-dirs: app
     default-language: GHC2021
 executable day16
     main-is: Day16.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -275,11 +304,13 @@ executable day16
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day17
     main-is: Day17.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -289,11 +320,13 @@ executable day17
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day18
     main-is: Day18.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -303,11 +336,13 @@ executable day18
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day19
     main-is: Day19.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -317,11 +352,13 @@ executable day19
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day20
     main-is: Day20.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -331,11 +368,13 @@ executable day20
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day21
     main-is: Day21.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -345,11 +384,13 @@ executable day21
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day22
     main-is: Day22.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -359,11 +400,13 @@ executable day22
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day23
     main-is: Day23.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -373,11 +416,13 @@ executable day23
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day24
     main-is: Day24.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -387,11 +432,13 @@ executable day24
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021
 executable day25
     main-is: Day25.hs
+    ghc-options: -interactive-print Text.Pretty.Simple.pPrint
     build-depends:
       base >= 4.16.0.0,
       containers,
@@ -401,6 +448,7 @@ executable day25
       vector,
       aoc2022,
       split,
-      mtl
+      mtl,
+      pretty-simple
     hs-source-dirs: app
     default-language: GHC2021

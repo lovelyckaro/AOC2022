@@ -4,7 +4,6 @@ import Data.Complex (Complex (..), realPart)
 import Data.List (nub)
 import SantaLib
 import SantaLib.Parsing hiding (State)
-import System.Exit (exitFailure)
 import Prelude hiding (Left, Right)
 
 data Instruction = Right | Left | Up | Down
