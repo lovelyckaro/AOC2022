@@ -1,14 +1,16 @@
 module Main where
 
-import Data.Set qualified as S
+import Data.Complex (Complex (..), realPart)
+import Data.List (nub)
 import SantaLib
 import SantaLib.Parsing hiding (State)
 import System.Exit (exitFailure)
 import Prelude hiding (Left, Right)
-import Prelude qualified as P
 
 data Instruction = Right | Left | Up | Down
   deriving (Show)
+
+type Point = Complex Double
 
 pInstruction :: Parser [Instruction]
 pInstruction = dir Right "R" <|> dir Left "L" <|> dir Up "U" <|> dir Down "D"
@@ -21,49 +23,37 @@ pInstruction = dir Right "R" <|> dir Left "L" <|> dir Up "U" <|> dir Down "D"
 pInp :: Parser [Instruction]
 pInp = concat <$> many pInstruction
 
-newtype State = State {knots :: [(Int, Int)]}
+newtype State = State {knots :: [Point]}
   deriving (Show)
 
 initState :: State
-initState = State [(0, 0), (0, 0)]
+initState = State [0, 0]
 
 initState2 :: State
-initState2 = State (replicate 10 (0, 0))
+initState2 = State (replicate 10 0)
 
-addTup :: (Int, Int) -> (Int, Int) -> (Int, Int)
-addTup (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+neighbor :: Point -> Point -> Bool
+neighbor p1 p2 = realPart (abs (p1 - p2)) <= sqrt 2
 
-subTup :: (Int, Int) -> (Int, Int) -> (Int, Int)
-subTup (x1, y1) (x2, y2) = (x1 - x2, y1 - y2)
-
-capMove :: (Int, Int) -> (Int, Int)
-capMove (x, y) = (x', y')
-  where
-    x' = if x < 0 then max (-1) x else min 1 x
-    y' = if y < 0 then max (-1) y else min 1 y
-
-neighbor :: (Int, Int) -> (Int, Int) -> Bool
-neighbor (x, y) (x', y') = abs (x - x') <= 1 && abs (y - y') <= 1
-
-moveTail :: (Int, Int) -> (Int, Int) -> (Int, Int)
+moveTail :: Point -> Point -> Point
 moveTail head tail
   | neighbor head tail = tail
-  | otherwise = tail `addTup` capMove (head `subTup` tail)
+  | otherwise = tail + fmap signum (head - tail)
 
-dirTup :: Instruction -> (Int, Int)
-dirTup Right = (1, 0)
-dirTup Left = (-1, 0)
-dirTup Down = (0, -1)
-dirTup Up = (0, 1)
+dirTup :: Instruction -> Point
+dirTup Right = 1 :+ 0
+dirTup Left = (-1) :+ 0
+dirTup Down = 0 :+ (-1)
+dirTup Up = 0 :+ 1
 
 move :: State -> Instruction -> State
 move (State knots) dir = State knots'
   where
     knots' = head' : zipWith moveTail knots' (tail knots)
-    head' = head knots `addTup` dirTup dir
+    head' = head knots + dirTup dir
 
 part :: State -> [Instruction] -> Int
-part init = S.size . S.fromList . map (last . knots) . scanl move init
+part init = length . nub . map (last . knots) . scanl move init
 
 main :: IO ()
 main = do
