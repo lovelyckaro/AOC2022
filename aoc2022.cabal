@@ -31,7 +31,8 @@ library
     text,
     tagsoup,
     vector,
-    megaparsec
+    megaparsec,
+    pretty-simple
   default-language: GHC2021
 
 executable fetch
@@ -39,7 +40,8 @@ executable fetch
   ghc-options: -interactive-print Text.Pretty.Simple.pPrint
   build-depends:
     base >= 4,
-    aoc2022
+    aoc2022,
+    pretty-simple
   hs-source-dirs: app
   default-language: GHC2021
 
@@ -48,7 +50,8 @@ executable submit
   ghc-options: -interactive-print Text.Pretty.Simple.pPrint
   build-depends:
     base >= 4,
-    aoc2022
+    aoc2022,
+    pretty-simple
   hs-source-dirs: app
   default-language: GHC2021
 
