@@ -12,6 +12,7 @@ module SantaLib.Parsing
     symbolSp,
     filterNums,
     parseIO,
+    signed,
   )
 where
 
@@ -58,6 +59,9 @@ symbolSp = L.symbol (void . optional . char $ ' ')
 
 filterNums :: String -> [Int]
 filterNums = map read . filter (all isNumber) . groupBy ((==) `on` isNumber)
+
+signed :: Num n => Parser n -> Parser n
+signed = L.signed space
 
 parseIO :: Parser a -> FilePath -> String -> IO a
 parseIO parser path str = case parse parser path str of
