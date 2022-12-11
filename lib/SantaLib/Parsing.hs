@@ -13,6 +13,10 @@ module SantaLib.Parsing
     filterNums,
     parseIO,
     signed,
+    spaceLn,
+    indented,
+    aligned,
+    L.nonIndented,
   )
 where
 
@@ -32,6 +36,9 @@ type Parser = Parsec Void String
 -- line comments, /* */ define a block comment
 space :: Parser ()
 space = L.space hspace1 (L.skipLineComment "//") (L.skipBlockComment "/*" "*/")
+
+spaceLn :: Parser ()
+spaceLn = L.space space1 (L.skipLineComment "//") (L.skipBlockComment "/*" "*/")
 
 -- |  Parse lexeme and (horizontal) white space following it
 lexeme :: Parser a -> Parser a
@@ -67,3 +74,12 @@ parseIO :: Parser a -> FilePath -> String -> IO a
 parseIO parser path str = case parse parser path str of
   Left err -> putStrLn (errorBundlePretty err) >> exitFailure
   Right ok -> return ok
+
+indented :: Pos -> Parser a -> Parser (Pos, a)
+indented ref p = do
+  pos <- L.indentGuard space GT ref
+  v <- p
+  return (pos, v)
+
+aligned :: Pos -> Parser a -> Parser a
+aligned ref p = L.indentGuard space EQ ref >> p
