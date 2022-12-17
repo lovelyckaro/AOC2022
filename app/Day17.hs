@@ -1,154 +1,208 @@
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Main where
 
-import Control.Monad
-import Data.List.Split
-import Data.Maybe
-import Data.Ord
-import Data.Set (Set)
-import Data.Set qualified as S
-import GHC.Exts
+import Control.Monad (guard)
+import Data.Bits
+  ( Bits (popCount, shiftL, shiftR, testBit, (.&.), (.|.)),
+  )
+import Data.HashMap.Strict (HashMap)
+import Data.HashMap.Strict qualified as HM
+import Data.Hashable (Hashable)
+import Data.Int (Int8)
+import GHC.Generics (Generic)
 import SantaLib
+import Text.Printf (printf)
 
 data Direction = L | R
-  deriving (Show)
+  deriving (Show, Eq, Ord, Generic)
+
+instance Hashable Direction
 
 pInp :: String -> [Direction]
-pInp = cycle . map pChar . filter (/= '\n')
+pInp = map pChar . filter (/= '\n')
   where
     pChar '>' = R
     pChar '<' = L
     pChar x = error $ "Bad character " <> show x
 
-data Point = Point {x, y :: Int}
-  deriving (Show, Eq)
+-- | Row is indexed by the positive part of a Int8
+newtype Row = Row Int8
+  deriving (Eq, Ord, Num, Bits, Hashable)
 
-instance Ord Point where
-  compare p1 p2 = case comparing y p1 p2 of
-    EQ -> comparing x p1 p2
-    x -> x
+instance Show Row where
+  show (Row n) = printf "%07b" n
 
-type Grid = Set Point
+type Grid = [Row]
 
 type Rock = Grid
 
-fromTup :: (Int, Int) -> Point
-fromTup (x, y) = Point x y
-
 line, plus, bend, column, square :: Rock
-line = S.fromList $ map fromTup [(0, 0), (1, 0), (2, 0), (3, 0)]
-plus = S.fromList $ map fromTup [(1, 0), (0, 1), (1, 1), (2, 1), (1, 2)]
-bend = S.fromList $ map fromTup [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]
-column = S.fromList $ map fromTup [(0, 0), (0, 1), (0, 2), (0, 3)]
-square = S.fromList $ map fromTup [(0, 0), (0, 1), (1, 0), (1, 1)]
+line = [0b0011110]
+plus =
+  [ 0b0001000,
+    0b0011100,
+    0b0001000
+  ]
+bend =
+  [ 0b0000100,
+    0b0000100,
+    0b0011100
+  ]
+column =
+  [ 0b0010000,
+    0b0010000,
+    0b0010000,
+    0b0010000
+  ]
+square =
+  [ 0b0011000,
+    0b0011000
+  ]
 
 rocks :: [Rock]
-rocks = cycle [line, plus, bend, column, square]
+rocks = [line, plus, bend, column, square]
 
 down :: Rock -> Rock
-down = S.map (\(Point x y) -> Point x (y - 1))
+down = (0b0 :)
 
 right :: Rock -> Rock
-right = S.map (\(Point x y) -> Point (x + 1) y)
+right rock =
+  if sum (map popCount rock') == sum (map popCount rock)
+    then rock'
+    else rock
+  where
+    rock' = map (`shiftR` 1) rock
 
 left :: Rock -> Rock
-left = S.map (\(Point x y) -> Point (x - 1) y)
+left rock =
+  if sum (map popCount rock') == sum (map popCount rock)
+    && not (any (`testBit` 7) rock')
+    then rock'
+    else rock
+  where
+    rock' = map (`shiftL` 1) rock
 
-inBounds :: Rock -> Bool
-inBounds = all (\(Point x y) -> x >= 0 && y >= 0 && x < 7)
+overlaps :: Rock -> Grid -> Bool
+overlaps rock grid = sum (zipWith (.&.) rock grid) /= 0
+
+join :: Rock -> Grid -> Grid
+join rock grid = zipWith (.|.) rock' grid'
+  where
+    (rock', grid') = pad rock grid
+    pad xs ys = case compare (length xs) (length ys) of
+      EQ -> (xs, ys)
+      GT -> (xs, ys <> replicate (length xs - length ys) 0)
+      LT -> (xs <> replicate (length ys - length xs) 0, ys)
 
 data GridState = GridState
   { grid :: Grid,
     rock :: Rock,
-    queue :: [Rock],
-    directions :: [Direction],
-    rockNum :: Int
+    queue :: ([Rock], [Rock]),
+    directions :: ([Direction], [Direction])
   }
+  deriving (Eq, Ord, Generic)
 
-pretty :: Grid -> Rock -> String
-pretty grid rock = unlines $ reverse $ chunksOf 7 $ map toChar possibles
-  where
-    toChar p
-      | p `S.member` rock = '@'
-      | p `S.member` grid = '#'
-      | otherwise = '.'
-    (Point _ rows) = S.findMax rock
-
-    possibles = [Point col row | row <- [0 .. rows], col <- [0 .. 6]]
+instance Hashable GridState
 
 instance Show GridState where
-  show gs = pretty gs.grid gs.rock
+  show gs = show (join gs.rock gs.grid)
+
+moveSide :: Direction -> Grid -> Rock -> Rock
+moveSide direction grid rock = if rock' `overlaps` grid then rock else rock'
+  where
+    rock' = case direction of
+      R -> right rock
+      L -> left rock
+
+moveDown :: Grid -> Rock -> Maybe Rock
+moveDown grid rock = do
+  let rock' = down rock
+  guard $ not $ rock' `overlaps` grid
+  guard $ length rock < length grid
+  return rock'
+
+nextDirection :: GridState -> (Direction, ([Direction], [Direction]))
+nextDirection gs = case gs.directions of
+  ([], dirs) -> (last dirs, (tail (reverse dirs), [last dirs]))
+  (dir : dirsLeft, dirsUsed) -> (dir, (dirsLeft, dir : dirsUsed))
+
+nextRock :: GridState -> (Rock, ([Rock], [Rock]))
+nextRock gs = case gs.queue of
+  ([], rocks) -> (last rocks, (tail (reverse rocks), [last rocks]))
+  (rock : rocksLeft, rocksUsed) -> (rock, (rocksLeft, rock : rocksUsed))
+
+padGrid :: Int -> Grid -> Grid
+padGrid n = (replicate n 0 <>) . dropWhile (== 0)
+
+tick :: GridState -> GridState
+tick gs =
+  let (dir, dirs') = nextDirection gs
+      rock' = moveSide dir gs.grid gs.rock
+   in case moveDown gs.grid rock' of
+        Just rock'' -> gs {rock = rock'', directions = dirs'}
+        Nothing ->
+          let grid' = join rock' gs.grid
+              (newRock, queue') = nextRock gs
+           in gs
+                { rock = newRock,
+                  grid = padGrid (length newRock + 3) grid',
+                  queue = queue',
+                  directions = dirs'
+                }
+
+tickRock :: GridState -> (Int, GridState)
+tickRock gs = (height ticked - height gs, ticked)
+  where
+    ticked = helper gs
+    helper gs = if gs.grid == gs'.grid then helper gs' else gs'
+      where
+        gs' = tick gs
 
 mkGridState :: [Direction] -> GridState
 mkGridState dirs =
   GridState
-    { grid = S.empty,
-      rock = S.map (\(Point x y) -> Point (x + 2) (y + 3)) (head rocks),
-      queue = tail rocks,
-      directions = dirs,
-      rockNum = 0
+    { grid = padGrid (length (head rocks) + 3) [0],
+      rock = head rocks,
+      queue = (tail rocks, [head rocks]),
+      directions = (dirs, [])
     }
 
-overlaps :: Rock -> Grid -> Bool
-overlaps rock grid = not $ S.null $ S.intersection rock grid
+-- | Assume a rock won't ever fall more than 100 rows down.
+indexItem :: GridState -> GridState
+indexItem gs = gs {grid = take 100 gs.grid}
 
-combine :: Rock -> Grid -> Grid
-combine = S.union
+height :: GridState -> Int
+height gs = length $ dropWhile (== 0) gs.grid
 
-highestPoint :: Grid -> Point
-highestPoint = S.findMax
-
-move :: Rock -> Grid -> Direction -> Rock
-move rock grid dir =
-  if inBounds rock' && not (overlaps grid rock')
-    then rock'
-    else rock
+heightAfterNRocks :: Int -> GridState -> Int
+heightAfterNRocks wantedRocks = fst . go 0 wantedRocks HM.empty
   where
-    rock' = case dir of
-      R -> right rock
-      L -> left rock
-
-moveDown :: Rock -> Grid -> Maybe Rock
-moveDown rock grid = do
-  let rock' = down rock
-  guard (inBounds rock')
-  guard (not (overlaps rock' grid))
-  return rock'
-
-toStartPos :: Rock -> Grid -> Rock
-toStartPos rock grid = S.map (\(Point x y) -> Point (x + 2) (y + p.y + 4)) rock
-  where
-    p = highestPoint grid
-
-tick :: GridState -> GridState
-tick gs =
-  let rock' = move gs.rock gs.grid (head gs.directions)
-   in case moveDown rock' gs.grid of
-        Just rock'' -> gs {rock = rock'', directions = tail gs.directions}
-        Nothing ->
-          let grid' = combine rock' gs.grid
-           in gs
-                { rock = toStartPos (head gs.queue) grid',
-                  grid = grid',
-                  queue = tail gs.queue,
-                  directions = tail gs.directions,
-                  rockNum = gs.rockNum + 1
-                }
-
-iterateUntil :: (t -> Bool) -> (t -> t) -> t -> t
-iterateUntil pred f init
-  | pred init = init
-  | otherwise = iterateUntil pred f (f init)
+    go :: Int -> Int -> HashMap GridState (Int, Int) -> GridState -> (Int, HashMap GridState (Int, Int))
+    go currHeight 0 index gridState = (currHeight, index)
+    go currHeight rocksLeft index gridState = case index HM.!? indexItem gridState of
+      Nothing ->
+        let index' = HM.insert (indexItem gridState) (currHeight, rocksLeft) index
+            (heightDelta, gridState') = tickRock gridState
+         in go (currHeight + heightDelta) (pred rocksLeft) index' gridState'
+      -- Cycle detected, we've been here before. A that point the tower was
+      -- oldHeight long, and we had oldRocks many rocks left
+      Just (oldHeight, oldRocks) ->
+        let heightDelta = currHeight - oldHeight
+            rockDelta = oldRocks - rocksLeft
+            (multiplier, rocksLeft') = divMod rocksLeft rockDelta
+            (heightDiff, nextState) = tickRock (indexItem gridState)
+         in go (currHeight + multiplier * heightDelta + heightDiff) (rocksLeft' - 1) index nextState
 
 part1 :: [Direction] -> Int
-part1 dirs = succ $ y $ highestPoint $ grid $ iterateUntil ((== 2022) . rockNum) tick (mkGridState dirs)
+part1 instrs = heightAfterNRocks 2022 (mkGridState instrs)
+
+part2 :: [Direction] -> Int
+part2 instrs = heightAfterNRocks 1000000000000 (mkGridState instrs)
 
 main :: IO ()
 main = do
   inp <- getInput 17
   let moves = pInp inp
   putAnswer 17 Part1 (part1 moves)
-
--- putAnswer 17 Part2 (part2 moves)
+  putAnswer 17 Part2 (part2 moves)
