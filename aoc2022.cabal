@@ -294,6 +294,8 @@ executable day15
       aoc2022,
       split,
       mtl,
+      pretty-simple,
+      sbv
     hs-source-dirs: app
     default-language: GHC2021
 executable day16
