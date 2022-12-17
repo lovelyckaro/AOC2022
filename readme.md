@@ -20,6 +20,7 @@
 | [Day 11](https://adventofcode.com/2022/day/11) | ⭐ | ⭐ |
 | [Day 12](https://adventofcode.com/2022/day/12) | ⭐ | ⭐ |
 | [Day 13](https://adventofcode.com/2022/day/13) | ⭐ | ⭐ |
+| [Day 14](https://adventofcode.com/2022/day/14) | ⭐ | ⭐ |
 <!--- advent_readme_stars table --->
 
 Run a day using `cabal run day[number]`, e.g. `cabal run day3`.
