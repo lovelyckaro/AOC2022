@@ -87,7 +87,7 @@ evalMinute blueprint = do
   -- Buy phase
   buyChoices <- lift $ sBools ["buyOreRobot", "buyClayRobot", "buyObsidianRobot", "buyGeodeRobot"]
   -- Can buy at most one robot
-  lift $ constrain $ (.<= (1 :: SWord8)) $ sum $ map oneIf buyChoices
+  lift $ constrain $ pbMutexed buyChoices
   forM_ (zip [Ore ..] buyChoices) $ \(material, shouldBuy) -> do
     affordable <- canAfford blueprint material
     -- must afford the robot to buy
