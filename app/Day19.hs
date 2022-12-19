@@ -1,7 +1,10 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Main where
 
+import Control.Concurrent
+import Control.Concurrent.MVar
 import Control.Monad.State
 import Data.Map (Map)
 import Data.Map qualified as M
@@ -115,20 +118,30 @@ mkObjective numMinutes bp = do
 
 optimalGeodes :: Int -> Blueprint -> IO Word8
 optimalGeodes numMinutes bp = do
-  putStrLn $ "Starting optimize of blueprint number: " <> show bp.number
   LexicographicResult res <- optimize Lexicographic (mkObjective numMinutes bp)
   let val = fromJust $ getModelValue "goal" res
-  putStrLn $ "Blueprint number: " <> show bp.number <> ", optimal: " <> show val
   return val
 
 part1 :: [Blueprint] -> IO Int
 part1 blueprints = do
-  opts <- mapM (optimalGeodes 24) blueprints
+  vars <- forM blueprints $ \blueprint -> do
+    var <- newEmptyMVar
+    forkFinally (optimalGeodes 24 blueprint) $ \case
+      Left error -> print error
+      Right res -> putMVar var res
+    return var
+  opts <- mapM readMVar vars
   return $ sum $ zipWith (\bpNum opt -> bpNum * fromIntegral opt) (map number blueprints) opts
 
 part2 :: [Blueprint] -> IO Int
 part2 blueprints = do
-  opts <- mapM (optimalGeodes 32) (take 3 blueprints)
+  vars <- forM (take 3 blueprints) $ \blueprint -> do
+    var <- newEmptyMVar
+    forkFinally (optimalGeodes 32 blueprint) $ \case
+      Left error -> print error
+      Right res -> putMVar var res
+    return var
+  opts <- mapM readMVar vars
   return $ product $ map fromIntegral opts
 
 main :: IO ()
