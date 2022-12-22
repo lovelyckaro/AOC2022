@@ -87,8 +87,8 @@ loopAround1 b s = s {position = helper b s s.position}
       | otherwise = candidate
 
 up, down, left, right :: Point
-up = 0 :+ 1
-down = 0 :+ (-1)
+up = 0 :+ (-1)
+down = 0 :+ 1
 left = -1
 right = 1
 
@@ -116,23 +116,6 @@ loopAround2 :: Board -> State -> State
 loopAround2 _ s@(State pos (0 :+ dy)) = loopAround2YWise s
 loopAround2 _ s@(State pos (dx :+ 0)) = loopAround2XWise s
 
-{-
-  | x == 0 && y >= 150 && y < 200 = (y - 100) :+ 0
-  | y == 0 && x >= 50 && x < 100 = 0 :+ (x + 100)
-  | y == 0 && x >= 100 && x < 150 = (x - 100) :+ 199
-  | y == 199 && x >= 0 && x < 50 = (x + 100) :+ 0
-  | x == 0 && y >= 100 && y < 150 = 50 :+ ((-y) + 149)
-  | x == 50 && y >= 0 && y < 50 = 0 :+ ((-y) + 149)
-  | y == 100 && x >= 0 && x < 50 = 50 :+ (x + 50)
-  | x == 50 && y >= 50 && y < 100 = (y - 50) :+ 100
-  | x == 99 && y >= 50 && y < 100 = (y + 50) :+ 49
-  | y == 49 && x >= 100 && x < 150 = 99 :+ (x - 50)
-  | x == 99 && y >= 100 && y < 150 = 149 :+ ((-y) + 149)
-  | x == 149 && y >= 0 && y < 50 = 99 :+ ((-y) + 149)
-  | x == 49 && y >= 150 && y < 200 = (y - 100) :+ 149
-  | y == 149 && x >= 50 && x < 100 = 49 :+ (x + 100)
--}
-
 nextPoint :: (Board -> State -> State) -> Board -> State -> Maybe State
 nextPoint loopAround b s
   | pointIsFree b (s.position + s.facing) = Just $ s {position = s.position + s.facing}
@@ -156,7 +139,7 @@ step loopAround b instruction state = case instruction of
 
 -- | Begin in leftmost open tile in top row
 initState :: Board -> State
-initState b = State {position = initPos, facing = 1 :+ 0}
+initState b = State {position = initPos, facing = right}
   where
     initPos = S.findMin $ S.filter ((== 0) . imagPart) $ b.opens
 
@@ -167,9 +150,9 @@ score :: State -> Int
 score (State pos facing) =
   1000 * round (imagPart pos + 1) + 4 * round (realPart pos + 1) + case facing of
     (1 :+ 0) -> 0
-    (0 :+ -1) -> 1
+    (0 :+ 1) -> 1
     (-1 :+ 0) -> 2
-    (0 :+ 1) -> 3
+    (0 :+ -1) -> 3
     _ -> error "Bad final facing"
 
 part1 :: String -> Int
