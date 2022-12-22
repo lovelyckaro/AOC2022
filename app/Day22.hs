@@ -1,14 +1,12 @@
-{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Main where
 
-import Control.Monad
-import Data.Char
-import Data.Complex
-import Data.Foldable
-import Data.List.Split
-import Data.Ord
+import Data.Char (isNumber)
+import Data.Complex (Complex (..), imagPart, realPart)
+import Data.Foldable (Foldable (foldl'))
+import Data.List.Split (chunksOf, splitOn)
+import Data.Ord (comparing)
 import Data.Set (Set)
 import Data.Set qualified as S
 import SantaLib
