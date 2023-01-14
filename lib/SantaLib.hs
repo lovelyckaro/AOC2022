@@ -30,6 +30,10 @@ import Data.Text.IO qualified as TIO
 import Data.Vector (Vector)
 import Data.Vector qualified as V
 import Text.HTML.TagSoup
+import Text.Pandoc
+
+htmlToMd :: Text -> IO Text
+htmlToMd html = runIOorExplode $ readHtml def html >>= writeMarkdown def
 
 getOpts :: IO AoCOpts
 getOpts = do
@@ -48,8 +52,10 @@ fetchDescription :: Integer -> IO ()
 fetchDescription d = do
   opts <- getOpts
   m <- runAoC_ opts $ AoCPrompt (mkDay_ d)
-  TIO.writeFile ("descr/day" <> show d <> "-part1.html") (fromMaybe "Part 1 not unlocked yet" (m !? Part1))
-  TIO.writeFile ("descr/day" <> show d <> "-part2.html") (fromMaybe "Part 2 not unlocked yet" (m !? Part2))
+  p1 <- htmlToMd $ fromMaybe "Part 1 not unlocked yet" (m !? Part1)
+  p2 <- htmlToMd $ fromMaybe "Part 2 not unlocked yet" (m !? Part2)
+  TIO.writeFile ("descr/day" <> show d <> "-part1.md") p1
+  TIO.writeFile ("descr/day" <> show d <> "-part2.md") p2
   -- hopefully get parse the example. It is usually the first thing within <pre><code> tags.
   let example = pExample (m ! Part1)
   TIO.writeFile ("input/day" <> show d <> "-example.input") example

@@ -32,7 +32,8 @@ library
     tagsoup,
     vector,
     megaparsec,
-    pretty-simple
+    pretty-simple,
+    pandoc
   default-language: GHC2021
 
 executable fetch
